@@ -258,11 +258,11 @@ public class LmsOrchsController {
 		return response;
 	}
 	
-	@RequestMapping(path = "/borrower/bookloans", method= RequestMethod.PUT, consumes = {"application/json", "application/xml"})
+	@RequestMapping(path = "/borrower/bookloan:bookloan", method= RequestMethod.PUT, consumes = {"application/json", "application/xml"})
 	public ResponseEntity<BookLoans> updateLoanBorrower(@RequestBody BookLoans loans)
 	{
 		try {
-		restTemplate.put("http://localhost:8083/lms/borrower/bookloans:bookloans", loans);
+		restTemplate.put("http://localhost:8083/lms/borrower/bookloan:bookloan", loans);
 		}
 		catch(IllegalArgumentException e)
 		{
@@ -288,10 +288,10 @@ public class LmsOrchsController {
 		return response.getBody();
 	}
 	
-	@RequestMapping(path = "/borrower/bookcopies", method= RequestMethod.PUT, consumes = {"application/json", "application/xml"})
+	@RequestMapping(path = "/borrower/bookcopies:bookcopies", method= RequestMethod.PUT, consumes = {"application/json", "application/xml"})
 	public String updateBookCopiesBorrower(@RequestBody BookCopies bc)
 	{
-		restTemplate.put("http://localhost:8081/lms/librarian/bookCopies", bc);
+		restTemplate.put("http://localhost:8081/lms/librarian/bookcopies:bookcopies", bc);
 		return "Update Success!";
 	}
 	

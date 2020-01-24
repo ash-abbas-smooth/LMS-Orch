@@ -25,7 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Autowired
 	UserDAO udao;
 	
-	 private BCryptPasswordEncoder passwordEncoder;
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	public SecurityConfiguration(UserDetailsService userDetailsService, UserDAO udao) {
 		this.userDetailsService = userDetailsService;
