@@ -9,50 +9,80 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "tbl_genre")
-public class Genre 
-{
+public class Genre {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int genreId;
+	private Long id;
 	
-	@Column(name = "genre_name")
-	private String genreName;
+	@Column(name = "name")
+	private String name;
 	
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "tbl_book_genres",
+			joinColumns = {@JoinColumn(name = "genre_id")},
+			inverseJoinColumns = { @JoinColumn(name = "book_id")}
+			)
+	private List<Book> books;
+	
+	/*
+	 * CONSTRUCTORS
+	 */
+	public Genre() {}
+	public Genre(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
 	/*
 	 * GETTERS/SETTERS
 	 */
-	public int getGenreId() {
-		return genreId;
+	public Long getId() {
+		return id;
 	}
-	public void setGenreId(int genreId) {
-		this.genreId = genreId;
+
+	public void setId(Long id) {
+		this.id = id;
 	}
-	public String getGenreName() {
-		return genreName;
+
+	public String getName() {
+		return name;
 	}
-	public void setGenreName(String genreName) {
-		this.genreName = genreName;
+
+	public void setName(String name) {
+		this.name = name;
 	}
-	/*
-	 * EQUALS/HASH
-	 */
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Genre other = (Genre) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(genreName);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
-	@Override
-	public boolean equals(Object o)
-	{
-		if(this == o) return true;
-		if(o == null || getClass() != o.getClass()) return false;
-		Genre other = (Genre) o;
-		return Objects.equals(getGenreName(), other.getGenreName());
-	}
-	
-	
 }

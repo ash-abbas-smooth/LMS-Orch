@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -243,32 +244,39 @@ public class LmsOrchsController {
 	 * BORROWER FUNCTIONS
 	 */
 	@RequestMapping(path = "/borrower/bookloans/{cardNo}", method= RequestMethod.GET)
-	public BookLoans[] readLoansByCardNoBorrower(@PathVariable("cardNo") int cardNo)
+	public ResponseEntity<BookLoans[]> readLoansByCardNoBorrower(@PathVariable("cardNo") int cardNo)
 	{
 		Map<String,Integer> params = new HashMap<String,Integer>();
 		params.put("cardNo", cardNo);
 		ResponseEntity<BookLoans[]> response = restTemplate.getForEntity("http://localhost:8083/lms/borrower/bookloans/{cardNo}", BookLoans[].class, params);
-		return response.getBody();
+		return response;
 	}
-	@RequestMapping(path = "/borrower/bookloans", method= RequestMethod.POST)
-	public String createLoanBorrower(@RequestBody BookLoans loans)
+	@RequestMapping(path = "/borrower/bookloan", method= RequestMethod.POST, consumes = {"application/json", "application/xml"})
+	public ResponseEntity<BookLoans> createLoanBorrower(@RequestBody BookLoans loans)
 	{
-		restTemplate.postForEntity("http://localhost:8083/lms/borrower/bookloans", loans, BookLoans.class);
-		return "Create Successful!";
+		ResponseEntity<BookLoans> response = restTemplate.postForEntity("http://localhost:8083/lms/borrower/bookloan", loans, BookLoans.class);
+		return response;
 	}
 	
-	@RequestMapping(path = "/borrower/bookloans", method= RequestMethod.PUT)
-	public String updateLoanBorrower(@RequestBody BookLoans loans)
+	@RequestMapping(path = "/borrower/bookloans", method= RequestMethod.PUT, consumes = {"application/json", "application/xml"})
+	public ResponseEntity<BookLoans> updateLoanBorrower(@RequestBody BookLoans loans)
 	{
-		restTemplate.put("http://localhost:8083/lms/borrower/bookloans", loans);
-		return "Update Successful!";
+		try {
+		restTemplate.put("http://localhost:8083/lms/borrower/bookloans:bookloans", loans);
+		}
+		catch(IllegalArgumentException e)
+		{
+			ResponseEntity<BookLoans> resp = new ResponseEntity<BookLoans>(HttpStatus.BAD_REQUEST);
+			return resp;
+		}
+		return new ResponseEntity<BookLoans>(HttpStatus.OK);
 	}
 	
 	@RequestMapping(path = "/borrower/branches", method = RequestMethod.GET)
-	public Branch[] readBranchesBorrower()
+	public ResponseEntity<Branch[]> readBranchesBorrower()
 	{
 		ResponseEntity<Branch[]> response = restTemplate.getForEntity("http://localhost:8083/lms/borrower/branches", Branch[].class);
-		return response.getBody();
+		return response;
 	}
 	
 	@RequestMapping( path = "/borrower/bookcopies/{branchId}", method = RequestMethod.GET )
@@ -280,7 +288,7 @@ public class LmsOrchsController {
 		return response.getBody();
 	}
 	
-	@RequestMapping(path = "/borrower/bookcopies", method= RequestMethod.PUT)
+	@RequestMapping(path = "/borrower/bookcopies", method= RequestMethod.PUT, consumes = {"application/json", "application/xml"})
 	public String updateBookCopiesBorrower(@RequestBody BookCopies bc)
 	{
 		restTemplate.put("http://localhost:8081/lms/librarian/bookCopies", bc);

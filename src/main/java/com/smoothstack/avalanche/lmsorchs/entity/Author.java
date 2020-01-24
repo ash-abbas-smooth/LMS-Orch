@@ -12,65 +12,80 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "tbl_author")
-public class Author 
-{
+public class Author {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int authorId;
+	private Long id;
 	
-	@Column( name = "authorName")
-	private String authorName;
+	@Column(name = "name")
+	private String name;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "tbl_book_authors",
-			joinColumns = { @JoinColumn(name = "authorId")},
-			inverseJoinColumns ={ @JoinColumn(name = "bookId")})
+			joinColumns = {@JoinColumn(name = "author_id")},
+			inverseJoinColumns = { @JoinColumn(name = "book_id")}
+			)
 	private List<Book> books;
+	/*
+	 * TODO: implement mappings
+	 */
 	
+	/*
+	 * CONSTRUCTORS
+	 */
 	public Author() {}
-	public Author(String name)
-	{
-		this.authorName = name;
+	public Author(Long id, String name) {
+		this.id = id;
+		this.name = name;
 	}
 	/*
-	 * Getters / Setters
+	 * GETTERS/SETTERS
 	 */
-	public int getAuthorId() {
-		return authorId;
-	}
-	public void setAuthorId(int authorId) {
-		this.authorId = authorId;
-	}
-	public String getAuthorName() {
-		return authorName;
-	}
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
+	public Long getId() {
+		return id;
 	}
 
-	/*
-	 * Equals/ HashCode
-	 */
-	@Override
-	public boolean equals(Object o)
-	{
-		if( this == o) return true;
-		if( o == null || getClass() != o.getClass())
-			return false;
-		Author other = (Author) o;
-		return Objects.equals(getAuthorName(), other.getAuthorName());
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 	@Override
-	public int hashCode()
-	{
-		return Objects.hash(authorName);
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Author other = (Author) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 }
