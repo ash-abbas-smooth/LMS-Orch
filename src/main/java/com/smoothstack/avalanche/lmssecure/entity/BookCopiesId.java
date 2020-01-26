@@ -1,4 +1,4 @@
-package com.smoothstack.avalanche.lmsorchs.entity;
+package com.smoothstack.avalanche.lmssecure.entity;
 
 import java.io.Serializable;
 
