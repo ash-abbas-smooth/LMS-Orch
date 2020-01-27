@@ -1,34 +1,104 @@
-/**
- * 
- */
 package com.smoothstack.avalanche.lmssecure.entity;
 
-/**
- * @author Ashian
- *
- */
+
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "tbl_book_copies")
 public class BookCopies {
-	private int bookId;
-	private int branchId;
-	private int noOfCopies;
+
+	@EmbeddedId
+	private BookCopiesId bookCopiesId;
 	
-	public int getBookId() {
-		return bookId;
+	
+	@MapsId("bookId")
+	@ManyToOne
+	@JoinColumn(name = "book_id")
+	private Book book;
+	
+	@MapsId("branchId")
+	@ManyToOne
+	@JoinColumn(name = "branch_id")
+	private Branch branch;
+	
+	
+	@Column(name = "no_of_copies")
+	private Long noOfCopies;
+
+	/*
+	 * CONSTRUCTOR
+	 */
+
+	public BookCopies() {
+		
 	}
-	public void setBookId(int bookId) {
-		this.bookId = bookId;
-	}
-	public int getBranchId() {
-		return branchId;
-	}
-	public void setBranchId(int branchId) {
-		this.branchId = branchId;
-	}
-	public int getNoOfCopies() {
-		return noOfCopies;
-	}
-	public void setNoOfCopies(int noOfCopies) {
+
+	public BookCopies(BookCopiesId bookCopiesId, Long noOfCopies) {
+		this.bookCopiesId = bookCopiesId;
 		this.noOfCopies = noOfCopies;
 	}
+	/*
+	 * GETTERS / SETTERS
+	 */
 	
+	public BookCopiesId getBookCopiesId() {
+		return bookCopiesId;
+	}
+
+	public void setBookCopiesId(BookCopiesId bookCopiesId) {
+		this.bookCopiesId = bookCopiesId;
+	}
+
+	
+	public Book getBook() {
+		return book;
+	}
+
+	public void setBook(Book book) {
+		this.book = book;
+	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
+	}
+	
+	public Long getNoOfCopies() {
+		return noOfCopies;
+	}
+
+	public void setNoOfCopies(Long noOfCopies) {
+		this.noOfCopies = noOfCopies;
+	}
+	/*
+	 * EQUALS/HASHCODE
+	 */
+	@Override
+	public boolean equals(Object o)
+	{
+		if( this == o) return true;
+		if( o == null || getClass() != o.getClass())
+			return false;
+		BookCopies other = (BookCopies) o;
+		return Objects.equals(getBookCopiesId(), other.getBookCopiesId())
+				&& Objects.equals(getNoOfCopies(), other.getNoOfCopies());
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(bookCopiesId,noOfCopies);
+	}
 }

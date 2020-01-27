@@ -1,49 +1,143 @@
 package com.smoothstack.avalanche.lmssecure.entity;
 
-import java.sql.Date;
 
+import java.util.Date;
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "tbl_book_loans")
 public class BookLoans {
-	private int bookId;
-	private int branchId;
-	private int cardNo;
-	private Date dateOut;
-	private Date dueDate;
+
+	@EmbeddedId
+	private BookLoansId bookLoansId;
 	
-	public int getBookId() {
-		return bookId;
+	@MapsId("bookId")
+	@ManyToOne
+	@JoinColumn(name = "book_id")
+	private Book book;
+	
+	@MapsId("branchId")
+	@ManyToOne
+	@JoinColumn(name = "branch_id")
+	private Branch branch;
+	
+	@MapsId("cardNo")
+	@ManyToOne
+	@JoinColumn(name = "card_no")
+	private Borrower borrower;
+	
+	@Column(name = "date_out")
+	private Date dateOut;
+	
+	@Column(name = "date_due")
+	private Date dateDue;
+	
+	@Column(name = "date_in")
+	private Date dateIn;
+
+	/*
+	 * CONSTRUCTOR
+	 */
+
+	public BookLoans() {
+		
 	}
-	public void setBookId(int bookId) {
-		this.bookId = bookId;
+
+	public BookLoans(BookLoansId bookLoansId, Date dateOut, Date dateDue, Date dateIn) {
+
+		this.bookLoansId = bookLoansId;
+		this.dateOut = dateOut;
+		this.dateDue = dateDue;
+		this.dateIn = dateIn;
 	}
-	public int getBranchId() {
-		return branchId;
+
+	/*
+	 * GETTERS/SETTERS
+	 */
+	public BookLoansId getBookLoansId() {
+		return bookLoansId;
 	}
-	public void setBranchId(int branchId) {
-		this.branchId = branchId;
+
+	public void setBookLoansId(BookLoansId bookLoansId) {
+		this.bookLoansId = bookLoansId;
 	}
-	public int getCardNo() {
-		return cardNo;
+	
+	public Book getBook() {
+		return book;
 	}
-	public void setCardNo(int cardNo) {
-		this.cardNo = cardNo;
+
+	public void setBook(Book book) {
+		this.book = book;
 	}
+
+	public Branch getBranch() {
+		return branch;
+	}
+
+	public void setBranch(Branch branch) {
+		this.branch = branch;
+	}
+
+	public Borrower getBorrower() {
+		return borrower;
+	}
+
+	public void setBorrower(Borrower borrower) {
+		this.borrower = borrower;
+	}
+
 	public Date getDateOut() {
 		return dateOut;
 	}
+
 	public void setDateOut(Date dateOut) {
 		this.dateOut = dateOut;
 	}
-	public Date getDueDate() {
-		return dueDate;
+
+	public Date getDateDue() {
+		return dateDue;
 	}
-	public void setDueDate(Date dueDate) {
-		this.dueDate = dueDate;
+
+	public void setDateDue(Date dateDue) {
+		this.dateDue = dateDue;
 	}
+
 	public Date getDateIn() {
 		return dateIn;
 	}
+
 	public void setDateIn(Date dateIn) {
 		this.dateIn = dateIn;
 	}
-	private Date dateIn;
+	
+	/*
+	 * EQUALS / HASHCODE
+	 */
+	@Override
+	public boolean equals(Object o)
+	{
+		if( this == o) return true;
+		if( o == null || getClass() != o.getClass())
+			return false;
+		BookLoans other = (BookLoans) o;
+		return Objects.equals(getBook(), other.getBook()) && 
+				Objects.equals(getBranch(), other.getBranch()) &&
+				Objects.equals(getBorrower(), other.getBorrower()) &&
+				Objects.equals(getDateOut(), other.getDateOut());
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(bookLoansId);
+	}
 }
