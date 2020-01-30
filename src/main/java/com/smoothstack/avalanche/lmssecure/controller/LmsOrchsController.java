@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 
-import com.smoothstack.avalanche.lmssecure.db.UserRepository;
+
 import com.smoothstack.avalanche.lmssecure.entity.Author;
 import com.smoothstack.avalanche.lmssecure.entity.Book;
 import com.smoothstack.avalanche.lmssecure.entity.BookCopies;
@@ -30,7 +30,7 @@ import com.smoothstack.avalanche.lmssecure.entity.BookLoans;
 import com.smoothstack.avalanche.lmssecure.entity.Borrower;
 import com.smoothstack.avalanche.lmssecure.entity.Branch;
 import com.smoothstack.avalanche.lmssecure.entity.Publisher;
-import com.smoothstack.avalanche.lmssecure.entity.User;
+
 
 import java.net.URI;
 import java.util.HashMap;
@@ -43,22 +43,14 @@ import java.util.Map;
 @RequestMapping("lms")
 @CrossOrigin
 public class LmsOrchsController {
-	private UserRepository userRepository;
 
 	@Autowired
 	RestTemplate restTemplate;
 
-	public LmsOrchsController(UserRepository userRepository) {
-		this.userRepository = userRepository;
-	}
-
 	/***********
 	 * Admin Functions
 	 ***********/
-	@GetMapping("admin/users")
-	public List<User> users() {
-		return this.userRepository.findAll();
-	}
+
 	
 	//Admin Books
 	@RequestMapping(path = "/admin/books", method = RequestMethod.GET)
